@@ -1,0 +1,42 @@
+{
+    "云南陆军讲武堂":{
+        "nodes":[
+            {"id": 1001,"name":"云南陆军讲武堂","type": "main"},
+            {"id": 1002,"name":"辛亥革命","type": "event"},
+            {"id": 1003,"name":"护国运动","type": "event"},
+            {"id": 1004,"name":"北伐战争","type": "event"},
+            {"id": 1005,"name":"朱德","type": "person"},
+            {"id": 1006,"name":"蔡锷","type": "person"},
+            {"id": 1007,"name":"叶剑英","type": "person"},
+            {"id": 1008,"name":"龙云","type": "person"}   
+        ],
+        "edges":[
+            {"source":"1001","target":"1002","label": "  "},
+            {"source":"1001","target":"1003","label": "  "},
+            {"source":"1001","target":"1004","label": "  "},
+            {"source":"1001","target":"1005","label": "  "},
+            {"source":"1001","target":"1006","label": "  "},
+            {"source":"1001","target":"1007","label": "  "},
+            {"source":"1001","target":"1008","label": "  "}
+        ]
+    },
+    "蔡锷":{
+        "nodes":[
+            {"id": 1001,"name":"蔡锷","type": "main"},
+            {"id": 1002,"name":"南洋公学","type": "event"},
+            {"id": 1003,"name":"武昌起义","type": "event"},
+            {"id": 1004,"name":"护国运动","type": "event"},
+            {"id": 1005,"name":"革命烈士","type": "cell"},
+            {"id": 1006,"name":"云南陆军讲武堂","type": "place"},
+            {"id": 1007,"name":"重九起义","type": "event"}
+        ],
+        "edges":[
+            {"source":"1001","target":"1002","label": "  "},
+            {"source":"1001","target":"1003","label": "  "},
+            {"source":"1001","target":"1004","label": "  "},
+            {"source":"1001","target":"1005","label": "  "},
+            {"source":"1001","target":"1006","label": "教官"},
+            {"source":"1001","target":"1007","label": "  "}
+        ]
+    }
+}
