@@ -61,14 +61,16 @@ export const userinfo = () => {
 }
 
 export const user_head_img = () => {
-  return request_user({
+  return request_user<Blob>({
     method: 'get',
-    url: '/uploadfile/get/head/url',
+    responseType: 'blob', // 明确指定响应类型为blob  
+    url: '/uploadfile/get/head',
     headers: {
         'accept': 'application/json',
       }
   })
 }
+
 
 type UserBack = {
     "number_phone": "",
