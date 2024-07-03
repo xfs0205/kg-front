@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import * as echarts from 'echarts'
-import { request_time } from '../../utils/request'
+import { request } from '../../utils/request'
 import { useTokenStore } from '@/stores/loginToken'
 import axios from 'axios'
 import tree from './timetree.json'

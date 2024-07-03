@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 import AMapLoader from '@amap/amap-jsapi-loader'
-import { request_map } from '@/utils/request'
+import { request } from '@/utils/request'
 import pathArr from '../utils/map_yun'
 import { useTokenStore } from '@/stores/loginToken'
 import axios from 'axios'

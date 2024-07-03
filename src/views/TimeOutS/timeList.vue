@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { request_time } from "../../utils/request"
+import { request } from "../../utils/request"
 import { useTokenStore } from '@/stores/loginToken';
 import axios from 'axios';
 
