@@ -1,8 +1,7 @@
-<!-- <script setup lang="ts">
+<script setup lang="ts">
 import { ref } from 'vue'
-import { request_per } from '../utils/request'
+import { request } from '../utils/request'
 import nodes from './NodeGroup.vue'
-import video from './Videos/videoOut.vue'
 
 const persons = ref([
   { id: '', name: '', time: '', path: '', href: '', info: '', home: '', img: '' },
@@ -21,7 +20,7 @@ const peoples = ref([[
 const people = ref([{ name: '', href: '' }])
 peoples.value.pop();
 
-request_per({
+request({
   method: 'GET',
   url: '/backend/groups/to_person'
 })
@@ -48,9 +47,9 @@ request_per({
 //     // 处理任何可能出现的错误
 //     console.error('There was an error fetching the buttons data:', error)
 //   })
-</script> -->
+</script>
 
-<!-- <template>
+<template>
   <div class="common-layout" style="margin-top: 15px;">
     <el-container>
       <el-header id="head-one">&nbsp;&nbsp;&nbsp;&nbsp;红色人物图谱</el-header>
@@ -113,9 +112,9 @@ request_per({
     </el-container>
     <video></video>
   </div>
-</template> -->
+</template>
 
-<!-- <style lang="scss" scoped>
+<style lang="scss" scoped>
 .el-header {
   display: flex;
   background-color: #eee;
@@ -205,5 +204,5 @@ request_per({
   margin-left: 20px;
   background-color: #eee;
 }
-</style> -->
+</style> 
 
