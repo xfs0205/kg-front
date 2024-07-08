@@ -1,5 +1,5 @@
 <script setup>
-
+import { menuList } from '@/Message/menu'
 </script>
 
 <template>
