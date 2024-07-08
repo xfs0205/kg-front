@@ -1,16 +1,16 @@
 <script setup>
 import { menuList } from '@/Message/menu'
-
+import { ref } from 'vue'
+const menusList = ref([])
 const initMenusList = async() => {
-    const res = await menuList()
-    console.log(res)
+    console.value = await menuList()
 }
 initMenusList()
 </script>
 
 <template> 
     <el-menu default-active="2" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose">
-        <el-sub-menu index="1">
+        <el-sub-menu : index="item.id" v-for="item in menusList" :key="item.id">
             <template #title>
                 <el-icon>
                     <location />
