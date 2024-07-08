@@ -1,5 +1,5 @@
 <script setup lang="ts">
-
+import Menu from'./Menu'
 </script>
 
 <template>
@@ -7,6 +7,7 @@
     
     <el-container class="message">
       <el-aside width="200px">Aside</el-aside>
+        <Menu />
       <el-container>
         <el-header>Header</el-header>
         <el-main>Main</el-main>
