@@ -1,3 +1,7 @@
+<script setup>
+
+</script>
+
 <template>
     <el-menu default-active="2" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose">
         <el-sub-menu index="1">
@@ -38,9 +42,5 @@
     </el-menu>
 
 </template>
-
-<script setup>
-
-</script>
 
 <style lang="scss" scoped></style>
