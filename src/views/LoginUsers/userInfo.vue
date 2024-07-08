@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { ref, defineEmits, defineProps } from 'vue'
 import { ElMessage } from 'element-plus'
-import { user_head_img } from '@/utils/users';
+import { user_head_img, isPower} from '@/utils/users'
 import { request_user } from '@/utils/request'
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const emit = defineEmits(['updateInfo', 'changUrl']);
 
@@ -53,6 +56,14 @@ const headImageUpload: any = (file: { file: Blob; }) => {
     });
 };
 
+const toMessage = () => {
+    isPower().then(async re =>{
+        if (re.data.accept){
+            router.push({"path": '/message'})
+        }
+    })
+}
+
 
 </script>
 
@@ -83,7 +94,7 @@ const headImageUpload: any = (file: { file: Blob; }) => {
                         <h2>浏览记录</h2>
                     </div>
                 </div>
-                <el-link class="message-button" :underline="false">进入管理员系统<el-icon><IEpCaretRight /></el-icon></el-link>
+                <el-link class="message-button" :underline="false" @click="toMessage">进入管理员系统<el-icon><IEpCaretRight /></el-icon></el-link>
             </div>
         </div>
     </div>

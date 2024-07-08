@@ -8,6 +8,7 @@ import recommend from '../views/RecommendOut.vue'
 import answer from '../views/AnswerOut.vue'
 import AppLayout from '../components/AppLayout.vue'
 import LargeDataScreen from '../components/LargeDataScreen.vue'
+import Message from '@/views/Message/MessageView.vue'
 import { useTokenStore } from '@/stores/loginToken'
 
 const router = createRouter({
@@ -28,6 +29,11 @@ const router = createRouter({
       path: '/enroll',
       name: 'enroll',
       component: () => import('../views/LoginUsers/EnrollUser.vue')
+    },
+    {
+      path: '/message',
+      name: 'message',
+      component: Message
     },
     {
       path: '/large/data',

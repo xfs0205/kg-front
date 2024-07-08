@@ -93,3 +93,14 @@ export const logout = (ID: string) => {
     }
   })
 }
+
+// 判别是否具有管理员权限
+export const isPower = () =>{
+  return request_user({
+    method: 'get',
+    url: '/backend/user/power',
+    headers: {
+      'accept': 'application/json',
+    }
+  })
+}
