@@ -94,6 +94,7 @@ function CreateMap() {
     geo: [{
       map: Data_map.value.name,
       roam: true,
+      z: 3,
       zoom: 1.2,
       aspectScale: 1.2,
       itemStyle: {
