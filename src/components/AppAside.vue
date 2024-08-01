@@ -43,6 +43,9 @@ if(stores.token.ID){
         <el-menu-item :index="'/dashboard/'+userID+'/answer'">
           <el-icon><IEpChatLineRound /></el-icon>  <span>智能问答</span>
         </el-menu-item>
+        <el-menu-item :index="'/changzheng'">
+          <el-icon><IEpWindPower /></el-icon>  <span>红军长征</span>
+        </el-menu-item>
       </el-menu>
     </el-scrollbar>
   </el-aside>

@@ -18,17 +18,32 @@ import { DiQing } from '@/assets/Map_data/diqing'
 import { NuJiang } from '@/assets/Map_data/nujiang'
 import { BaoShan } from '@/assets/Map_data/baoshan'
 import { DeHong } from '@/assets/Map_data/dehong'
-import marks from '@/assets/pos.json'
+import marks from './pos.json'
 
 const chart_init = ref(false)
+
+const left_data = ref({
+  width: "0px",
+  info: []
+})
+
+const right_data = ref({
+  width: "0px",
+  info: ''
+})
 
 function getLineMarks(name: string) {
   for (const item of marks) {
     if (item.city == name) {
       const cityMarks = []
       for (const load of item.loads) {
-        cityMarks.push(load.info)
-      }   
+        const lineMarks = load.info.map(info => info.coord);
+        cityMarks.push({
+          city: name,
+          name: load.name,
+          coords: lineMarks
+        })
+      }
       return cityMarks
     }
   }
@@ -40,10 +55,13 @@ function getMarks(name: string) {
     if (item.city == name) {
       const cityMarks = []
       for (const load of item.loads) {
-        for (const l of load.info){
-          cityMarks.push(l)
+        for (const l of load.info) {
+          cityMarks.push({
+            name: l.name,
+            value: l.coord
+          })
         }
-      }   
+      }
       return cityMarks
     }
   }
@@ -65,74 +83,90 @@ function CreateMap() {
   // 注册地图数据
   echarts.registerMap(Data_map.value.name, Data_map.value.Data as any)
 
-  if (!chart_init.value){
+  if (!chart_init.value) {
     chart = echarts.init(document.getElementById('mapContainer'));
     chart_init.value = true
   }
-  
+
 
   // 设置地图的配置项和数据
   const option = {
+    geo: [{
+      map: Data_map.value.name,
+      roam: true,
+      zoom: 1.2,
+      aspectScale: 1.2,
+      itemStyle: {
+        borderColor: '#ff5500',
+        areaColor: '#ddd'
+      },
+      emphasis: {
+        itemStyle: {
+          color: 'rgb(0, 251, 255)'
+        }
+      },
+      label: {
+        show: true,
+        formatter: function (param: { name: any }) {
+          return param.name;
+        },
+        opacity: 0.4,
+      },
+    }],
     series: [
       {
-        zoom: 1.2,
-        aspectScale: 1,
-        type: 'map', // 类型必须为 'map'
-        map: Data_map.value.name,
-        roam: true,
-        // 在以下属性中设置其他地图样式和行为
-        itemStyle: {
-          borderColor: '#ff5500',
-          areaColor: '#ddd'
+        geoIndex: 0,
+        coordinateSystem: 'geo',
+        type: 'lines',
+        polyline: true,
+        data: Data_map.value.linemarks,
+        lineStyle: {
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+            offset: 0,
+            color: 'rgba(255, 255, 0, 0.8)' // 渐变色起始颜色
+          }, {
+            offset: 1,
+            color: 'rgba(255, 0, 0, 0.8)' // 渐变色结束颜色
+          }]),
+          width: 4,
+          opacity: 0.5,
+          curveness: 0.8, // 增加线条的平滑度
+          shadowBlur: 10,
+          shadowColor: 'rgba(0, 0, 0, 0.4)',
+          shadowOffsetX: 5,
+          shadowOffsetY: 5
         },
         emphasis: {
-          itemStyle: {
-            color: '#ff5500'
+          lineStyle: {
+            width: 6,
+            color: 'rgba(255, 255, 0, 1)',
           }
         },
+        effect: {
+          show: true,
+          symbol: 'circle',
+          symbolSize: 10,
+          rippleEffect: {
+            period: 7, // 动画时间
+            scale: 4, // 波纹的缩放比例
+            brushType: 'fill' // 波纹的绘制方式
+          }
+        },
+      },
+      {
+        geoIndex: 0,
+        coordinateSystem: 'geo',
+        type: 'scatter',
+        symbol: 'pin',
+        symbolSize: 30,
+        data: Data_map.value.pointmarks,
         label: {
-          show: false, // 显示省份标签
-          formatter: '{b}' // 标签内容格式器，{b} 表示地区名称
-        },
-        // 标注的配置项
-        markPoint: {
-          symbol: 'pin', // 标注形状
-          symbolSize: 30, // 标注大小
-          label: {
-            show: false,
-            formatter: '{b}',
-          },
-          emphasis: {
-            label: {
-              show: true,
-              formatter: function (param: { name: any }) {
-                return param.name;
-              },
-              color: 'black'
-            }
-          },
-          data: Data_map.value.pointmarks
-        },
-        // 飞线的配置项
-        markLine: {
-          symbol: ['none', 'none'], // 起点和终点的标记类型，这里表示起点无标记，终点有箭头
-          // smooth: true, // 是否平滑曲线显示
-          effect: {
-            show: true, // 是否显示动画效果
-            scaleSize: 3, // 动画大小
-            period: 30, // 动画周期
-            color: 'rgb(8, 138, 138)', // 动画颜色
-            shadowColor: '#f4e925' // 动画阴影颜色
-          },
-          lineStyle: {
-            color: '#f4e925', // 线的颜色
-            width: 4, // 线的宽度
-            curveness: 0.5, // 线的曲直度，0表示直线，0.5表示曲度较大
-            opacity: 0.8 // 线的透明度
-          },
-          data: Data_map.value.linemarks
+          formatter: '{b}',
+          position: 'right',
+          show: true,
+          fontSize: 8,
         }
-      }
+      },
     ],
     title: {
       //text: '云南地图',
@@ -144,8 +178,8 @@ function CreateMap() {
     }
   }
 
-  chart.on('dblclick', (params: { componentType: string; name: any }) => {
-    if (params.componentType === 'series') {
+  chart.on('dblclick', (params: any) => {
+    if (params.componentType === 'geo') {
       const cityName = params.name
 
       if (cityName === '昆明市') {
@@ -248,10 +282,37 @@ function CreateMap() {
 
       //更新地图
       echarts.registerMap(Data_map.value.name, Data_map.value.Data as any)
-      option.series[0].map = Data_map.value.name
-      option.series[0].markPoint.data = Data_map.value.pointmarks as never
-      option.series[0].markLine.data = Data_map.value.linemarks as never
+      option.geo[0].map = Data_map.value.name
+      option.series[0].data = Data_map.value.linemarks
+      option.series[1].data = Data_map.value.pointmarks as never
       chart.setOption(option, true)
+    }
+  })
+
+  chart.on('click', (params: any) => {
+    if (params.componentType === 'series' && params.componentSubType === 'lines') {
+      left_data.value.info = []
+      left_data.value.width = "300px"
+      const data = params.data
+      for (const i of marks) {
+        if (data.city == i.city) {
+          for (const load of i.loads) {
+            if (data.name == load.name) {
+              load.info.map((n: any) => {
+                left_data.value.info.push(n.name as never)
+              })
+            }
+          }
+          break
+        }
+      }
+    }
+    else if (params.componentType === 'series' && params.componentSubType === 'scatter') {
+      const data = params.data
+      if (right_data.value.width == '0px') {
+        right_data.value.width = '300px'
+      }
+      right_data.value.info = data.name
     }
   })
   // 使用地图数据和配置项渲染地图
@@ -259,21 +320,46 @@ function CreateMap() {
 }
 
 function Back() {
+  left_data.value.info = []
+  left_data.value.width = '0px'
+  right_data.value.info = ''
+  right_data.value.width = '0px'
   Data_map.value.grade = 0
   Data_map.value.name = 'YUNNAN';
-  (Data_map.value.pointmarks = []),(Data_map.value.linemarks = []), (Data_map.value.Data = mapData)
+  (Data_map.value.pointmarks = []), (Data_map.value.linemarks = []), (Data_map.value.Data = mapData)
   CreateMap()
 }
 
+function cli1(key: any) {
+  const s = left_data.value.info[key]
+  if (right_data.value.width == '0px') {
+    right_data.value.width = '300px'
+  }
+  right_data.value.info = s
+}
+
 onMounted(() => {
-  
+
   CreateMap()
 })
 </script>
 
 <template>
-  <div id="mapContainer" style="width: 100%; height: 80%"></div>
-  <el-button type="primary" style="z-index: 10; position: absolute; top: 25%; left: 67%" v-if="Data_map.grade > 0"
+  <div id="mapContainer" style="width: 100%; height: 100%"></div>
+  <el-aside class="left" :width="left_data.width">
+    <el-scrollbar>
+      <div class="info" v-for="(item, index) in left_data.info" :key="index" @click="cli1(index)">
+        <span>{{ item }}</span>
+      </div>
+    </el-scrollbar>
+  </el-aside>
+  <el-aside class="right" :width="right_data.width">
+    <div class="content">
+      <span>{{ right_data.info }}</span>
+    </div>
+
+  </el-aside>
+  <el-button type="primary" style="z-index: 10; position: absolute; top: 20%; left: 67%" v-if="Data_map.grade > 0"
     @click="Back()">
     返回<el-icon class="el-icon--right">
       <IEpBack />
@@ -282,9 +368,52 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.kkk{
-  background-color: rgb(8, 138, 138);
-  height: calc(100);
+.left {
+  position: absolute;
+  top: 75px;
+  left: 0px;
+  z-index: 10;
+  height: calc(100vh - 75px);
+  background-color: rgb(35, 159, 194);
+  transition: width 1s ease;
+
+  .info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 90%;
+    height: 55px;
+    background-color: rgba(83, 125, 240, 0.7);
+    color: aliceblue;
+    margin-top: 20px;
+    margin-left: 5%;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 3px;
+  }
+
+  .info:hover {
+    background-color: antiquewhite;
+    color: black;
+  }
+
 }
 
+.right {
+  position: absolute;
+  top: 75px;
+  right: 0px;
+  z-index: 10;
+  height: calc(100vh - 75px);
+  background-color: rgb(35, 159, 194);
+  transition: width 1s ease;
+
+  .content {
+    display: flex;
+    /* justify-content: center; */
+    align-items: center;
+    max-width: 300px;
+    background-color: azure;
+  }
+}
 </style>

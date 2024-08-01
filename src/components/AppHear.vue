@@ -31,6 +31,7 @@ onMounted(async () => {
 
     await user_head_img().then((res) => {
         if (res.data instanceof Blob) {
+            console.log(res.data)
             const imgUrl = URL.createObjectURL(res.data);
             userInfo.value.head_img = imgUrl;
         } else {

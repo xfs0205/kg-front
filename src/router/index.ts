@@ -9,6 +9,7 @@ import answer from '../views/AnswerOut.vue'
 import AppLayout from '../components/AppLayout.vue'
 import LargeDataScreen from '../components/LargeDataScreen.vue'
 import Message from '@/views/Message/MessageView.vue'
+import changZheng from '@/views/ToTopic/changZheng/changZheng.vue'
 import { useTokenStore } from '@/stores/loginToken'
 
 const router = createRouter({
@@ -42,6 +43,11 @@ const router = createRouter({
 	  children:[
 		  
 	  ]
+    },
+    {
+      path: '/changzheng',
+      name: 'changzheng',
+      component: changZheng
     },
     {
       path: '/dashboard/:user',
